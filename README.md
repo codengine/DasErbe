@@ -10,6 +10,23 @@ The repository is organized as follows:
 - `Game` is the default original-asset root used when running from the repository root.
 - `tools/DumpStrings` extracts the original executable's strings to create translation overlays.
 
+# Added features
+
+- Translation support (`--language`)
+- Mouse-over hovering (hotspots hints will be shown immediately instead of via clicking, can be turned of with `--use-classic-interactions`)
+- Hotspot highlighting (Spacebar)
+- DKSN-mode (will show some fallback responses instead of...nothing, `--dksn-mode`)
+- Intro music from the amiga version
+- You are able to use the ingame keypad using your keyboard/numpad
+
+# Bugfixes
+- Fixed soft lock if you went to the city, came back, went upstairs and were not able to leave your room anymore
+- Fixed a visual glitch that the brochure would reappear when leaving the laundromat while it has already been taken
+- Fixed that saving and loading inside the laundromat caused visual corruption
+- Fixed an exception / edge case while entering the laundromat
+- Fixed inconsistent image overlay drawing
+- Fixed that the "guy" was selectable at the start of the game
+
 ## Requirements
 
 - [.NET 10 SDK](https://dotnet.microsoft.com/download/dotnet/10.0)
