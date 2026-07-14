@@ -1,0 +1,113 @@
+using System.Diagnostics.CodeAnalysis;
+
+namespace Game.DataBlock.Selection;
+
+// Semantic selection-entry names derived from DATA_BLOCK_REFERENCE.md and the
+// generator's documented spare-record inventory.
+[SuppressMessage("ReSharper", "InconsistentNaming")]
+[SuppressMessage("ReSharper", "UnusedMember.Local")]
+[SuppressMessage("Roslynator", "RCS1213:Remove unused member declaration")]
+internal static class SelectionEntryCatalog
+{
+    private const int HouseAquariumRecord = 0x00;
+    internal const int CarKeyItem = 0x01;
+    internal const int KitchenOvenRecord = 0x02;
+    private const int GardenTreeRecord = 0x03;
+    internal const int BedroomBedRecord = 0x04;
+    private const int FurnitureStoreBedOfferRecord = 0x05;
+    private const int HousePictureRecord = 0x06;
+    private const int CityQuickLaundromatDoorRecord = 0x07;
+    private const int LetterItemRecord = 0x08;
+    private const int City2MailSlotAndMailboxRecord = 0x09;
+    private const int StampItemRecord = 0x0A;
+    private const int RecycledWritingPaperItemRecord = 0x0B;
+    private const int RecycledWritingPaperPurchaseChoiceRecord = 0x0C;
+    private const int WhiteWritingPaperItemRecord = 0x0D;
+    private const int BrochureItemRecord = 0x0E;
+    internal const int BedroomBoxRecord = 0x0F;
+    private const int BedroomWindowRecord = 0x10;
+    private const int BedroomComputerRecord = 0x11;
+    private const int UnusedPromptClassSpareRecord0x12 = 0x12;
+    private const int UnusedPromptClassSpareRecord0x13 = 0x13;
+    private const int StrawberryItemRecord = 0x14;
+    internal const int BasementElectricHeaterRecord = 0x15;
+    internal const int BicycleRecord = 0x16;
+    private const int BicyclePumpItemRecord = 0x17;
+    internal const int NoItemPlaceholderRecordA = 0x18;
+    internal const int NoItemPlaceholderRecordB = 0x19;
+    internal const int NoItemPlaceholderRecordC = 0x1A;
+    internal const int BasementFireExtinguisherRecord = 0x1B;
+    private const int IngesShopFireExtinguisherOfferRecord = 0x1C;
+    private const int LighterItemRecord = 0x1D;
+    private const int HousePhotoRecord = 0x1E;
+    internal const int Garage = 0x1F;
+    private const int LivingRoomGardenDoorRecord = 0x20;
+    private const int WalletItemRecord = 0x21;
+    private const int CityFurnitureStoreDoorRecord = 0x22;
+    internal const int BusStopRecord = 0x23;
+    internal const int HouseConditionRecord = 0x24;
+    private const int HouseLivingRoomDoorRecord = 0x25;
+    internal const int BasementHeatingSystemRecord = 0x26;
+    internal const int BedroomHeaterRecord = 0x27;
+    internal const int BillysBurgerBarDoorRecord = 0x28;
+    internal const int IntBurgerConnectDoorRecord = 0x29;
+    private const int IngesShopIngeRecord = 0x2A;
+    private const int FurnitureStoreIngesShopDoorRecord = 0x2B;
+    private const int IngesShopCashRegisterRecord = 0x2C;
+    private const int KitchenBasementDoorRecord = 0x2D;
+    private const int IngesShopBellAndStampDiscoveryRecord = 0x2E;
+    private const int GardenCompostRecord = 0x2F;
+    private const int LivingRoomKitchenDoorRecord = 0x30;
+    internal const int KitchenRefrigeratorRecord = 0x31;
+    private const int FurnitureStoreRemoteControlledRefrigeratorRecord = 0x32;
+    private const int FurnitureStoreStandardRefrigeratorRecord = 0x33;
+    private const int BallpointPenItemRecord = 0x34;
+    internal const int GardenLeafPileRecord = 0x35;
+    private const int GardenLoungerRecord = 0x36;
+    private const int UnusedPromptClassSpareRecord0x37 = 0x37;
+    private const int UnusedGenericSpareRecord0x38 = 0x38;
+    private const int FurnitureStoreMattressOfferRecord = 0x39;
+    private const int City2TrashRecord = 0x3A;
+    private const int NoteItemRecord = 0x3B;
+    private const int BedroomPinboardRecord = 0x3C;
+    private const int BedroomPosterRecord = 0x3D;
+    private const int IngesShopShelfRecord = 0x3E;
+    private const int UnusedPromptClassSpareRecord0x3F = 0x3F;
+    private const int LiquidWhippedCreamItemRecord = 0x40;
+    internal const int HouseSwitch = 0x41;
+    private const int City2SignRecord = 0x42;
+    private const int WhiskItemRecord = 0x43;
+    internal const int HouseLeftDrawerRecord = 0x44;
+    internal const int HouseRightDrawerRecord = 0x45;
+    private const int BowlItemRecord = 0x46;
+    internal const int HouseArmchairRecord = 0x47;
+    private const int FurnitureStoreArmchairOfferRecord = 0x48;
+    private const int KitchenSinkRecord = 0x49;
+    private const int SprayCreamItemRecord = 0x4A;
+    private const int KitchenDishwasherRecord = 0x4B;
+    private const int BasementOutletRecord = 0x4C;
+    private const int FurnitureStoreStreetExitRecord = 0x4D;
+    private const int BedroomChairRecord = 0x4E;
+    internal const int BedroomKeyboardRecord = 0x4F;
+    private const int BedroomTelephoneRecord = 0x50;
+    private const int PhoneBookItemRecord = 0x51;
+    internal const int KitchenDishesRecord = 0x52;
+    internal const int HouseTableRecord = 0x53;
+    private const int FurnitureStoreTableOfferRecord = 0x54;
+    private const int BedroomExitRouteRecord = 0x55;
+    internal const int FriendlyManRecord = 0x56;
+    private const int FurnitureStoreSalesmanRecord = 0x57;
+    internal const int BedroomBirdRecord = 0x58;
+    private const int SnackBarFurnitureStoreDoorRecord = 0x59;
+    private const int CityWashingMachineRecord = 0x5A;
+    internal const int KitchenFaucetRecord = 0x5B;
+    private const int HouseWindowRecord = 0x5C;
+    internal const int BlankPromptPlaceholderRecord = 0x5D;
+    internal const int HouseCrackRecord = 0x5E;
+    private const int UnusedGenericSpareRecord0x5F = 0x5F;
+    private const int GardenFenceRecord = 0x60;
+    private const int CertificateItemRecord = 0x61;
+    private const int City2CigaretteRecord = 0x62;
+    private const int FencePromptRecord = 0x63;
+    private const int GlobalControlVerbRecord = 0x64;
+}

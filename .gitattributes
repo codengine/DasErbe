@@ -1,0 +1,23 @@
+# Enforce repository-owned line ending behavior across Linux and Windows.
+* text=auto eol=lf
+
+# Windows command scripts are the main text files that still require CRLF.
+*.bat text eol=crlf
+*.cmd text eol=crlf
+
+# Common binary formats must never be normalized.
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.bmp binary
+*.ico binary
+*.wav binary
+*.ogg binary
+*.mp3 binary
+*.zip binary
+*.7z binary
+*.dll binary
+*.exe binary
+*.ttf binary
+*.otf binary

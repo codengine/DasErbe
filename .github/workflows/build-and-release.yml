@@ -1,0 +1,162 @@
+name: Build and release
+
+on:
+  push:
+    branches:
+      - '**'
+    tags:
+      - 'v*'
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v7
+
+      - name: Set up .NET
+        uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: 10.0.x
+
+      - name: Build game solution
+        run: dotnet build src/Game.sln --configuration Release
+
+      - name: Build translation tool
+        run: dotnet build tools/DumpStrings/DumpStrings.csproj --configuration Release
+
+  publish:
+    name: Publish ${{ matrix.rid }}
+    if: startsWith(github.ref, 'refs/tags/v')
+    needs: build
+    permissions:
+      contents: read
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: windows-latest
+            rid: win-x64
+            executable: Game.Desktop.exe
+          - os: ubuntu-latest
+            rid: linux-x64
+            executable: Game.Desktop
+    runs-on: ${{ matrix.os }}
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v7
+
+      - name: Set up .NET
+        uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: 10.0.x
+
+      - name: Install Linux Native AOT prerequisites
+        if: runner.os == 'Linux'
+        run: |
+          sudo apt-get update
+          sudo apt-get install --yes clang zlib1g-dev zip
+
+      - name: Publish native executable
+        run: dotnet publish src/Game.Desktop/Game.Desktop.csproj --configuration Release --runtime ${{ matrix.rid }} --self-contained true --output artifacts/publish/Game.Desktop-${{ matrix.rid }} -p:PublishReadyToRun=false -p:TieredCompilation=false -p:EnableNativeAot=true
+
+      - name: Stage runtime bundle
+        shell: pwsh
+        run: |
+          $publishPath = Join-Path $env:GITHUB_WORKSPACE 'artifacts/publish/Game.Desktop-${{ matrix.rid }}'
+          Get-ChildItem -LiteralPath $publishPath -Recurse -File |
+              Where-Object { $_.Extension -in '.pdb', '.dbg', '.xml' } |
+              Remove-Item -Force
+          Copy-Item -LiteralPath (Join-Path $env:GITHUB_WORKSPACE 'Game') -Destination $publishPath -Recurse
+
+      - name: Verify runtime bundle
+        shell: pwsh
+        run: |
+          $publishPath = Join-Path $env:GITHUB_WORKSPACE 'artifacts/publish/Game.Desktop-${{ matrix.rid }}'
+          $executablePath = Join-Path $publishPath '${{ matrix.executable }}'
+          if (-not (Test-Path -LiteralPath $executablePath -PathType Leaf)) {
+              throw "Missing published executable '$executablePath'."
+          }
+
+          $sourceGamePath = Join-Path $env:GITHUB_WORKSPACE 'Game'
+          $bundledGamePath = Join-Path $publishPath 'Game'
+          $sourceFiles = @(Get-ChildItem -LiteralPath $sourceGamePath -Recurse -File)
+          $sourceRelativePaths = @($sourceFiles |
+              ForEach-Object { [IO.Path]::GetRelativePath($sourceGamePath, $_.FullName).Replace('\', '/') })
+          $bundledRelativePaths = @(Get-ChildItem -LiteralPath $bundledGamePath -Recurse -File |
+              ForEach-Object { [IO.Path]::GetRelativePath($bundledGamePath, $_.FullName).Replace('\', '/') })
+          $missingOrChangedFiles = @($sourceFiles | Where-Object {
+              $relativePath = [IO.Path]::GetRelativePath($sourceGamePath, $_.FullName)
+              $bundledPath = Join-Path $bundledGamePath $relativePath
+              -not (Test-Path -LiteralPath $bundledPath -PathType Leaf) -or
+                  (Get-FileHash -LiteralPath $_.FullName -Algorithm SHA256).Hash -ne
+                  (Get-FileHash -LiteralPath $bundledPath -Algorithm SHA256).Hash
+          } | ForEach-Object { [IO.Path]::GetRelativePath($sourceGamePath, $_.FullName).Replace('\', '/') })
+          $unexpectedFiles = @($bundledRelativePaths | Where-Object { $_ -notin $sourceRelativePaths })
+          if ($missingOrChangedFiles.Count -ne 0 -or $unexpectedFiles.Count -ne 0) {
+              throw "Bundled Game content differs from the repository. Missing or changed: $($missingOrChangedFiles -join ', '); unexpected: $($unexpectedFiles -join ', ')."
+          }
+
+          $excludedFiles = @(Get-ChildItem -LiteralPath $publishPath -Recurse -File |
+              Where-Object {
+                  $_.Extension -in '.pdb', '.dbg', '.xml' -and
+                      -not $_.FullName.StartsWith($bundledGamePath + [IO.Path]::DirectorySeparatorChar, [StringComparison]::OrdinalIgnoreCase)
+              })
+          if ($excludedFiles.Count -ne 0) {
+              throw "Runtime bundle contains excluded files: $($excludedFiles.FullName -join ', ')."
+          }
+
+      - name: Package Windows release
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          $publishPath = Join-Path $env:GITHUB_WORKSPACE 'artifacts/publish/Game.Desktop-${{ matrix.rid }}'
+          $releasePath = Join-Path $env:GITHUB_WORKSPACE 'artifacts/release'
+          New-Item -ItemType Directory -Path $releasePath -Force | Out-Null
+          Compress-Archive -Path (Join-Path $publishPath '*') -DestinationPath (Join-Path $releasePath 'Das-Erbe-${{ github.ref_name }}-${{ matrix.rid }}.zip')
+
+      - name: Package Linux release
+        if: runner.os == 'Linux'
+        shell: bash
+        run: |
+          publish_path="artifacts/publish/Game.Desktop-${{ matrix.rid }}"
+          release_path="$GITHUB_WORKSPACE/artifacts/release"
+          chmod +x "$publish_path/${{ matrix.executable }}"
+          mkdir -p "$release_path"
+          cd "$publish_path"
+          zip -q -r "$release_path/Das-Erbe-${{ github.ref_name }}-${{ matrix.rid }}.zip" .
+
+      - name: Upload release package
+        uses: actions/upload-artifact@v7
+        with:
+          name: release-${{ matrix.rid }}
+          path: artifacts/release/Das-Erbe-${{ github.ref_name }}-${{ matrix.rid }}.zip
+          if-no-files-found: error
+          compression-level: 0
+
+  release:
+    name: Create GitHub Release
+    if: startsWith(github.ref, 'refs/tags/v')
+    needs: publish
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v7
+
+      - name: Download release packages
+        uses: actions/download-artifact@v8
+        with:
+          pattern: release-*
+          path: artifacts/release
+          merge-multiple: true
+
+      - name: Create release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh release create "$GITHUB_REF_NAME" artifacts/release/*.zip --verify-tag --generate-notes

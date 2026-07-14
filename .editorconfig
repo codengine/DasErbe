@@ -1,0 +1,103 @@
+root = true
+
+[*]
+end_of_line = lf
+insert_final_newline = true
+
+[*.{bat,cmd}]
+end_of_line = crlf
+
+[*.cs]
+# Custom reverse-engineering analyzers:
+# Keep these at warning level in the template itself so the project stays usable
+# while still surfacing every important RE invariant. Downstream projects can
+# promote the hard invariants to errors if they want stricter gating.
+dotnet_diagnostic.REBP001.severity = warning
+# Duplicate exact-address symbol ownership.
+dotnet_diagnostic.REBP003.severity = warning
+# Classified symbol still uses raw sub_ name.
+dotnet_diagnostic.REBP004.severity = warning
+# Stub method shape/message is invalid.
+dotnet_diagnostic.REBP005.severity = warning
+# Missing explicit FunctionQuality/GlobalQuality.
+dotnet_diagnostic.REBP007.severity = warning
+# Symbol member missing XML comment with original name/address.
+dotnet_diagnostic.REBP008.severity = none
+# Legacy naming outside Examples.
+dotnet_diagnostic.REBP009.severity = warning
+# State global classification mismatch.
+dotnet_diagnostic.REBP010Q.severity = warning
+dotnet_diagnostic.REBP011.severity = suggestion
+# Suspicious private symbol owner.
+dotnet_diagnostic.REBP012.severity = warning
+# Verbatim/FullyClosed symbol calls unknown local helper.
+dotnet_diagnostic.REBP013.severity = warning
+# ObsoleteInPort symbol missing explicit runtime log.
+dotnet_diagnostic.REBP014.severity = suggestion
+# ObsoleteInPort symbol body looks too complex (heuristic).
+dotnet_diagnostic.REBP015.severity = suggestion
+# Suspicious packed-global split/overlap heuristic.
+dotnet_diagnostic.REBP016.severity = warning
+# Console.WriteLine outside approved entry points.
+dotnet_diagnostic.REBP017.severity = warning
+# Verbatim symbol calls Unspecified callee.
+dotnet_diagnostic.REBP018.severity = warning
+# Non-example code references Examples namespace/symbols.
+dotnet_diagnostic.REBP019.severity = warning
+# Classified method still throws NotImplementedException.
+dotnet_diagnostic.REBP020.severity = warning
+# Classified method still contains TODO/FIXME.
+dotnet_diagnostic.REBP021.severity = warning
+# Conflicting GlobalFlags owner/view roles.
+dotnet_diagnostic.REBP022.severity = suggestion
+# Suspicious FunctionFlags combinations.
+
+# Error: clear correctness/contract violations.
+dotnet_diagnostic.RCS1059.severity = error
+# Declare each type in separate file.
+dotnet_diagnostic.RCS1060.severity = error
+# Avoid locking on publicly accessible instance.
+dotnet_diagnostic.RCS1075.severity = error
+# Avoid empty catch clause that catches System.Exception.
+dotnet_diagnostic.RCS1155.severity = error
+# Use StringComparison when comparing strings.
+dotnet_diagnostic.RCS1210.severity = error
+# Return completed task instead of returning null.
+dotnet_diagnostic.RCS1215.severity = error
+# Expression is always equal to true/false.
+dotnet_diagnostic.RCS1256.severity = error
+# Invalid argument null check.
+
+# Warning: strong quality and correctness signals, but not always fatal.
+dotnet_diagnostic.RCS1130.severity = warning
+# Bitwise operation on enum without Flags attribute.
+dotnet_diagnostic.RCS1135.severity = warning
+# Declare enum member with zero value (when enum has FlagsAttribute).
+dotnet_diagnostic.RCS1166.severity = warning
+# Value type object is never equal to null.
+dotnet_diagnostic.RCS1193.severity = warning
+# Allow semantic summaries without duplicated original-symbol metadata, and allow param-only XML docs when a synthetic summary would add no semantic value.
+dotnet_diagnostic.RCS1139.severity = none
+# Overriding member should not change params modifier.
+dotnet_diagnostic.RCS1202.severity = warning
+# Avoid NullReferenceException.
+dotnet_diagnostic.RCS1203.severity = warning
+# Use AttributeUsageAttribute.
+dotnet_diagnostic.RCS1234.severity = warning
+# Duplicate enum value.
+dotnet_diagnostic.RCS1249.severity = warning
+# Unnecessary null-forgiving operator.
+dotnet_diagnostic.RCS1263.severity = warning
+# Invalid reference in a documentation comment.
+
+# Suggestion: useful hygiene, but not important enough to block.
+dotnet_diagnostic.RCS1093.severity = suggestion
+# File contains no code.
+dotnet_diagnostic.RCS1199.severity = suggestion
+# Unnecessary null check.
+dotnet_diagnostic.RCS1123.severity = none
+
+dotnet_diagnostic.MA0003.severity = none
+dotnet_diagnostic.MA0007.severity = none
+dotnet_diagnostic.MA0076.severity = warning
+dotnet_diagnostic.rcs1141.severity = warning

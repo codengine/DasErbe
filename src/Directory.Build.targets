@@ -1,0 +1,10 @@
+<Project>
+    <!--
+      Directory.Build.props is imported before the project file, so IsTestProject is not reliably set there.
+      Directory.Build.targets is imported after the project file, so we can condition on IsTestProject here.
+    -->
+    <PropertyGroup Condition="'$(IsTestProject)' == 'true'">
+        <NoWarn>$(NoWarn);CS1591</NoWarn>
+    </PropertyGroup>
+</Project>
+

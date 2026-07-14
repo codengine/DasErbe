@@ -1,0 +1,56 @@
+# Build output
+[Bb]in/
+[Oo]bj/
+artifacts/
+TestResults/
+
+# User/IDE files
+.vs/
+.idea/
+*.suo
+*.user
+*.userprefs
+*.rsuser
+*.sln.docstates
+
+# Rider
+_ReSharper*/
+*.DotSettings.user
+
+# VS Code
+.vscode/
+
+# NuGet
+packages/
+*.nupkg
+*.snupkg
+
+# Coverage
+coverage/
+coverage-*/
+*.coverage
+*.coveragexml
+
+# Logs
+logs/
+*.log
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+
+# OS noise
+.DS_Store
+Thumbs.db
+
+# Generated local artifacts
+/docs/ida_rename_manifest.json
+/IDA/**/*.map
+/IDA/**/*.lst
+/IDA/**/*.c
+
+/game.local.json
+/.dotnet-home/
+
+
