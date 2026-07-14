@@ -171,4 +171,4 @@ If an overlay file is missing, the game uses the original text. Invalid lines an
 
 ## License
 
-See [COPYING](COPYING) for the GNU General Public License, version 3.
+See [LICENSE](LICENSE) for the GNU General Public License, version 3.
