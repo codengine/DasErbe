@@ -13,7 +13,7 @@ The repository is organized as follows:
 ## Added features
 
 - Translation support (`--language`)
-- Mouse-over hovering (hotspots hints will be shown immediately instead of via clicking, can be turned of with `--use-classic-interactions`)
+- Mouse-over hovering and Click-to-action (hotspots hints will be shown immediately instead of via clicking, and interactions don't need a separate confirmation click, can be turned of with `--use-classic-interactions`)
 - Hotspot highlighting (Spacebar)
 - DKSN-mode (will show some fallback responses instead of...nothing, `--dksn-mode`)
 - Intro music from the amiga version
