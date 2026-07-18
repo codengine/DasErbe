@@ -25,11 +25,6 @@ internal readonly record struct RuntimeInputEvent(RuntimeInputEventKind Kind, In
     internal bool IsPrimaryConfirmAction => Kind == RuntimeInputEventKind.PrimaryClick;
 
     /// <summary>
-    ///     Gets whether this event should be treated as the current cancel action.
-    /// </summary>
-    internal bool IsCancelAction => IsKeyboardKey(InputKey.Escape);
-
-    /// <summary>
     ///     Creates a keyboard-backed runtime input event.
     /// </summary>
     /// <param name="keyStroke">The queued keyboard item captured from the host.</param>

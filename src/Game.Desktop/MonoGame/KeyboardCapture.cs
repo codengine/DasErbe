@@ -119,7 +119,6 @@ internal sealed class KeyboardCapture
     {
         var mappedKey = key switch
         {
-            Keys.Escape => InputKey.Escape,
             Keys.Enter => InputKey.Enter,
             Keys.Back => InputKey.Backspace,
             _ => InputKey.None

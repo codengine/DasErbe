@@ -59,14 +59,6 @@ internal sealed class InteractionLoop
 
             RunQueuedProgramStateTransitionFollowUp(programState);
             _runtime.PointerOverlay.AdvancePointerOverlayFrame();
-            if (_session.LastInput.IsCancelAction)
-            {
-                interactiveResult = 0x0012;
-                LogInteractiveResult("escape", interactiveResult, _session.SelectionPhase, _session.PrimaryDescriptor);
-                _session.Reset();
-                return interactiveResult;
-            }
-
             if (control is { AdvanceRequestedFlag: 0, ErrorCount: < 5 } &&
                 _session.SelectionPhase != InteractiveProgramStatePhase.Completed)
             {

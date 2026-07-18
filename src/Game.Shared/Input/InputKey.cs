@@ -11,11 +11,6 @@ public enum InputKey
     None = 0,
 
     /// <summary>
-    ///     Escape.
-    /// </summary>
-    Escape = 1,
-
-    /// <summary>
     ///     Space.
     /// </summary>
     Space = 2,
