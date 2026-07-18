@@ -123,6 +123,10 @@ dotnet src/Game.Desktop/bin/Debug/net10.0/Game.Desktop.dll --language en
 
 Running these commands from the repository root continues to use `Game` as the default asset directory. When starting the built game from another working directory, supply an absolute `--asset-root` path or set `GAME_ASSET_ROOT` to an absolute path.
 
+### Window controls
+
+Press Alt+Enter to toggle borderless window mode.
+
 ## Desktop command-line options
 
 Usage: `Game.Desktop [options]`
