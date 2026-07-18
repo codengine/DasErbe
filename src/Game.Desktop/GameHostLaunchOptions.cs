@@ -12,6 +12,7 @@ namespace Game.Desktop;
 /// <param name="Language">Optional language overlay identifier.</param>
 /// <param name="UseClassicInteractions">Whether the classic double-confirmation interaction flow should be preserved.</param>
 /// <param name="DksnMode">Whether the DKSN missing-hotspot fallback mode should be enabled.</param>
+/// <param name="IntegerScaling">Whether presentation scaling should be restricted to whole-number factors.</param>
 internal sealed record GameHostLaunchOptions(
     string? AssetRoot,
     string? LogLevel,
@@ -21,4 +22,5 @@ internal sealed record GameHostLaunchOptions(
     bool NoConsoleLog,
     string? Language,
     bool UseClassicInteractions,
-    bool DksnMode);
+    bool DksnMode,
+    bool IntegerScaling);

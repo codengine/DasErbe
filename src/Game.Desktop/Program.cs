@@ -25,7 +25,7 @@ try
         return 1;
     }
 
-    using var host = new DesktopGameHost(runtime, "Das Erbe");
+    using var host = new DesktopGameHost(runtime, "Das Erbe", options.IntegerScaling);
     host.Run();
     return 0;
 }

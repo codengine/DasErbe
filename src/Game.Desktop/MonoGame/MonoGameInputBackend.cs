@@ -12,6 +12,7 @@ public sealed class MonoGameInputBackend : IInputBackend
 {
     private readonly KeyboardCapture _keyboardCapture;
     private readonly TimeProvider _timeProvider;
+    private bool _suppressEnterUntilRelease;
 
     /// <summary>
     ///     Creates the input backend.
@@ -23,10 +24,11 @@ public sealed class MonoGameInputBackend : IInputBackend
     }
 
     /// <summary>
-    ///     Resets queued keyboard repeat state.
+    ///     Resets host-shortcut suppression and queued keyboard repeat state.
     /// </summary>
     public void Reset()
     {
+        _suppressEnterUntilRelease = false;
         _keyboardCapture.Reset();
     }
 
@@ -37,7 +39,25 @@ public sealed class MonoGameInputBackend : IInputBackend
     public InputFrame Poll(HostPresentationRect rect)
     {
         var keyboard = Keyboard.GetState();
-        var keyboardCaptureFrame = _keyboardCapture.Capture(keyboard.GetPressedKeys(),
+        var pressedKeys = keyboard.GetPressedKeys();
+        if (keyboard.IsKeyDown(Keys.Enter) && (keyboard.IsKeyDown(Keys.LeftAlt) || keyboard.IsKeyDown(Keys.RightAlt)))
+        {
+            _suppressEnterUntilRelease = true;
+        }
+
+        if (_suppressEnterUntilRelease)
+        {
+            if (keyboard.IsKeyUp(Keys.Enter))
+            {
+                _suppressEnterUntilRelease = false;
+            }
+            else
+            {
+                pressedKeys = [.. pressedKeys.Where(key => key != Keys.Enter)];
+            }
+        }
+
+        var keyboardCaptureFrame = _keyboardCapture.Capture(pressedKeys,
             _timeProvider.GetElapsedTime(0, _timeProvider.GetTimestamp()));
 
         var mouse = Mouse.GetState();

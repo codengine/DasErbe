@@ -65,15 +65,31 @@ public sealed class MonoGameScreenPresenter(GraphicsDevice graphicsDevice, bool 
     /// </summary>
     /// <param name="viewport">Current viewport.</param>
     /// <param name="screen">Screen being presented.</param>
-    public static HostPresentationRect ComputePresentationRect(Viewport viewport, Screen screen)
+    /// <param name="integerScaling">Whether to restrict the fitted rect to a whole-number scale.</param>
+    public static HostPresentationRect ComputePresentationRect(Viewport viewport, Screen screen, bool integerScaling)
     {
         // The game's 320x200 VGA art was meant for a 4:3 display, so we apply the usual 6:5 vertical stretch before
         // fitting it into the current viewport.
         var vgaCorrectedHeight =
             checked(screen.Height * VgaPresentationHeightNumerator / VgaPresentationHeightDenominator);
-        var scale = Math.Max(1, Math.Min(viewport.Width / screen.Width, viewport.Height / vgaCorrectedHeight));
-        var destinationWidth = checked(screen.Width * scale);
-        var destinationHeight = checked(vgaCorrectedHeight * scale);
+        int destinationWidth;
+        int destinationHeight;
+        if (integerScaling)
+        {
+            var scale = Math.Max(1, Math.Min(viewport.Width / screen.Width, viewport.Height / vgaCorrectedHeight));
+            destinationWidth = checked(screen.Width * scale);
+            destinationHeight = checked(vgaCorrectedHeight * scale);
+        }
+        else if ((long)viewport.Width * vgaCorrectedHeight <= (long)viewport.Height * screen.Width)
+        {
+            destinationWidth = viewport.Width;
+            destinationHeight = Math.Max(1, checked((int)((long)viewport.Width * vgaCorrectedHeight / screen.Width)));
+        }
+        else
+        {
+            destinationWidth = Math.Max(1, checked((int)((long)viewport.Height * screen.Width / vgaCorrectedHeight)));
+            destinationHeight = viewport.Height;
+        }
 
         return new HostPresentationRect(
             (viewport.Width - destinationWidth) / 2,

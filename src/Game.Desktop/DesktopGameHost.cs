@@ -22,10 +22,12 @@ internal sealed class DesktopGameHost : Microsoft.Xna.Framework.Game
     private readonly ManualResetEventSlim _bootCompleted = new(false);
     private readonly GraphicsDeviceManager _graphics;
     private readonly HotspotBlinkOverlay _hotspotBlinkOverlay = new();
+    private readonly bool _integerScaling;
     private readonly Erbe _runtime;
     private readonly Lock _runtimeGate = new();
     private readonly SelectableHotspotSource _selectableHotspotSource;
     private readonly ThreadPump _threadPump = new();
+    private readonly MonoGameWindowController _windowController;
     private HostPresentationRect _cachedPresentationRect = HostPresentationRect.Empty;
     private Screen? _frontBuffer;
     private Screen? _inFlightBuffer;
@@ -45,11 +47,14 @@ internal sealed class DesktopGameHost : Microsoft.Xna.Framework.Game
     /// </summary>
     /// <param name="runtime">Runtime instance driven by the host.</param>
     /// <param name="applicationName">Window title.</param>
-    internal DesktopGameHost(Erbe runtime, string applicationName)
+    /// <param name="integerScaling">Whether presentation scaling should be restricted to whole-number factors.</param>
+    internal DesktopGameHost(Erbe runtime, string applicationName, bool integerScaling)
     {
         _runtime = runtime;
+        _integerScaling = integerScaling;
         _selectableHotspotSource = new SelectableHotspotSource(runtime.Scenes, runtime.State);
         _graphics = new GraphicsDeviceManager(this);
+        _windowController = new MonoGameWindowController(_graphics, Window);
         IsFixedTimeStep = false;
         Content.RootDirectory = "Content";
         _graphics.PreferredBackBufferWidth = PreferredBackBufferWidth;
@@ -99,7 +104,9 @@ internal sealed class DesktopGameHost : Microsoft.Xna.Framework.Game
     protected override void Update(GameTime gameTime)
     {
         ThrowIfRuntimeLoopFailed();
+        _windowController.HandleKeyboardShortcut(IsActive);
         var presentationRect = GetPresentationRect(GetLayoutScreen());
+        _windowController.ConstrainMouse(presentationRect, IsActive);
         var input = PollInput(presentationRect);
         if (_runtime.IsPaused)
         {
@@ -217,7 +224,7 @@ internal sealed class DesktopGameHost : Microsoft.Xna.Framework.Game
             return _cachedPresentationRect;
         }
 
-        _cachedPresentationRect = MonoGameScreenPresenter.ComputePresentationRect(viewport, screen);
+        _cachedPresentationRect = MonoGameScreenPresenter.ComputePresentationRect(viewport, screen, _integerScaling);
         _lastViewportWidth = viewport.Width;
         _lastViewportHeight = viewport.Height;
         _lastScreenWidth = screen.Width;

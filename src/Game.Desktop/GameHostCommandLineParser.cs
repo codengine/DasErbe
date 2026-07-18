@@ -14,11 +14,12 @@ internal static class GameHostCommandLineParser
     /// <returns>True when parsing succeeds.</returns>
     internal static bool TryParseRunOptions(string[] args, out GameHostLaunchOptions options, out string? errorMessage)
     {
-        options = new GameHostLaunchOptions(null, null, [], [], null, false, null, false, false);
+        options = new GameHostLaunchOptions(null, null, [], [], null, false, null, false, false, true);
         string? assetRoot = null;
         string? logLevel = null;
         string? logFile = null;
         string? language = null;
+        var integerScaling = true;
         var noConsoleLog = false;
         var useClassicInteractions = false;
         var dksnMode = false;
@@ -48,6 +49,14 @@ internal static class GameHostCommandLineParser
                         break;
                     case ValueOption.Language:
                         language = value;
+                        break;
+                    case ValueOption.IntegerScaling:
+                        if (!bool.TryParse(value, out integerScaling))
+                        {
+                            errorMessage = $"Invalid --integer-scaling value '{value}'. Expected true or false.";
+                            return false;
+                        }
+
                         break;
                     case ValueOption.MuteLogChannels:
                         muteLogChannels.Add(value);
@@ -89,7 +98,8 @@ internal static class GameHostCommandLineParser
             noConsoleLog,
             language,
             useClassicInteractions,
-            dksnMode);
+            dksnMode,
+            integerScaling);
         errorMessage = null;
         return true;
     }
@@ -115,6 +125,7 @@ internal static class GameHostCommandLineParser
         writer.WriteLine("  --log-file <path>            Write logs to the specified file.");
         writer.WriteLine("  --no-console-log             Disable console log output.");
         writer.WriteLine("  --language <name>            Optional language overlay file name without .txt.");
+        writer.WriteLine("  --integer-scaling <bool>     Restrict scaling to whole-number factors (default: true).");
         writer.WriteLine("  --use-classic-interactions   Preserve the original double-confirmation interaction flow.");
         writer.WriteLine("  --dksn-mode                  Enable the DKSN missing-hotspot fallback mode.");
         writer.WriteLine("  --mute-log-channels <names>  Comma-separated logging channels to mute.");
@@ -155,6 +166,9 @@ internal static class GameHostCommandLineParser
             case "--language":
                 valueOption = ValueOption.Language;
                 return true;
+            case "--integer-scaling":
+                valueOption = ValueOption.IntegerScaling;
+                return true;
             case "--mute-log-channels":
                 valueOption = ValueOption.MuteLogChannels;
                 return true;
@@ -173,6 +187,7 @@ internal static class GameHostCommandLineParser
         LogLevel,
         LogFile,
         Language,
+        IntegerScaling,
         MuteLogChannels,
         UnmuteLogChannels
     }
