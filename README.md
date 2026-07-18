@@ -1,4 +1,12 @@
 # Das Erbe
+<p align="center">
+  <img width="642" height="512" alt="grafik" src="https://github.com/user-attachments/assets/43248d5c-3680-4d1c-bb8e-0b1f61906c09" />
+</p>
+
+<p align="center">
+  <img width="642" height="512" alt="grafik" src="https://github.com/user-attachments/assets/9dff10c4-9428-45d8-aa48-6ece60860a3a" />
+</p>
+
 
 This repository contains an unofficial C#/.NET desktop reimplementation of **Das Erbe**. The runtime reads data and text from the original DOS executable, loads the original `ERBE.DAT`, `ERBE.GAM`, and `GRAFIK` resources, and presents the game through MonoGame DesktopGL.
 
@@ -66,19 +74,6 @@ dotnet build tools/DumpStrings/DumpStrings.csproj
 ```
 
 Add `-c Release` to either command for a release build.
-
-### Automated builds and releases
-
-GitHub Actions builds the game solution and the translation utility in Release mode on every branch push.
-
-Pushing a tag whose name starts with `v` also publishes self-contained Native AOT builds for Windows x64 and Linux x64 and creates a GitHub Release with generated notes:
-
-```shell
-git tag v1.0.0
-git push origin v1.0.0
-```
-
-The release contains `Das-Erbe-<tag>-win-x64.zip` and `Das-Erbe-<tag>-linux-x64.zip`. Each archive contains the platform's executable, its required runtime files and MonoGame content, and the complete `Game` directory. Extract an archive and start the executable from the extracted directory; no separate .NET installation or asset copy is required.
 
 ## Run
 
