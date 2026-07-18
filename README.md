@@ -1,6 +1,6 @@
 # Das Erbe
 
-This repository contains a C#/.NET desktop reimplementation of **Das Erbe**. The runtime reads data and text from the original DOS executable, loads the original `ERBE.DAT`, `ERBE.GAM`, and `GRAFIK` resources, and presents the game through MonoGame DesktopGL.
+This repository contains an unofficial C#/.NET desktop reimplementation of **Das Erbe**. The runtime reads data and text from the original DOS executable, loads the original `ERBE.DAT`, `ERBE.GAM`, and `GRAFIK` resources, and presents the game through MonoGame DesktopGL.
 
 The repository is organized as follows:
 
@@ -9,6 +9,18 @@ The repository is organized as follows:
 - `src/Game.Desktop` is the MonoGame desktop host.
 - `Game` is the default original-asset root used when running from the repository root.
 - `tools/DumpStrings` extracts the original executable's strings to create translation overlays.
+
+## The Port
+
+This is a reverse engineered source port of the original game. It tries to be close to the source, even the savegame format is compatible with the DOS Version.
+Small convenience changes have been added which make allows you to play the game slightly "modernized", like hovering changes the status bar text.
+
+## The game
+
+Information about the game can be found here:
+- [Mobygames](https://www.mobygames.com/game/12352/das-erbe/)
+- [adventurecorner.de](https://www.adventurecorner.de/game/2558/das-erbe)
+- [Werbespiel Blog](https://werbespiel.blogspot.com/2010/07/das-erbe.html)
 
 ## Added features
 
