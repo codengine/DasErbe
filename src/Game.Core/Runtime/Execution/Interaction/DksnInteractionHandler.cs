@@ -11,6 +11,7 @@ namespace Game.Runtime.Execution.Interaction;
 internal sealed class DksnInteractionHandler(Erbe runtime)
 {
     private static readonly byte[][] DefaultResponseLines = TextUtils.EncodeNullTerminated(
+        "Das klappt so nicht.",
         "Das scheint nicht so recht zu funktionieren.",
         "Du probierst es kurz aus, aber das Ergebnis bleibt aus.",
         "Ein schöner Gedanke, aber es passiert einfach nichts.",
